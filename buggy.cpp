@@ -19,10 +19,14 @@ public:
     }
 
     ~Shape () {
-	delete [] points;
+       	for(int i = 0; i <= vertices; i++) {
+ 	    delete[] points[i];
+	}
+	delete[] points;
+	points = nullptr;
     }
 
-    void addPoints (Point pts[]/* formal parameter for unsized array called pts */) {
+    void addPoints (Point** pts/* formal parameter for unsized array called pts */) {
         for (int i = 0; i <= vertices; i++) {
             memcpy(&points[i], &pts[i%vertices], sizeof(Point));
         }
@@ -48,11 +52,11 @@ int main () {
     //          tri1 = (0, 0)
     //          tri2 = (1, 2)
     //          tri3 = (2, 0)
-    Point tri1 = Point(0,0);
-    Point tri2 = Point(1,2);
-    Point tri3 = Point(2,0);
+    Point* tri1 = new Point(0,0);
+    Point* tri2 = new Point(1,2);
+    Point* tri3 = new Point(2,0);
     // adding points to tri
-    Point triPts[3] = {tri1, tri2, tri3};
+    Point* triPts[3] = {tri1, tri2, tri3};
     Shape* tri = new Shape(3);
     tri->addPoints(triPts);
 
@@ -62,15 +66,16 @@ int main () {
     //          quad2 = (0, 2)
     //          quad3 = (2, 2)
     //          quad4 = (2, 0)
-    Point quad1 = Point(0,0);
-    Point quad2 = Point(0,2);
-    Point quad3 = Point(2,2);
-    Point quad4 = Point(2,0);
+    Point* quad1 = new Point(0,0);
+    Point* quad2 = new Point(0,2);
+    Point* quad3 = new Point(2,2);
+    Point* quad4 = new Point(2,0);
     // adding points to quad
-    Point quadPts[4] = {quad1, quad2, quad3, quad4};
+    Point* quadPts[4] = {quad1, quad2, quad3, quad4};
     Shape* quad = new Shape(4);
     quad->addPoints(quadPts);
 
     // FIXME: print out area of tri and area of quad
     std::cout << "hello";
+
 }
