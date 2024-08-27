@@ -19,11 +19,12 @@ public:
     }
 
     ~Shape () {
+	delete [] points;
     }
 
     void addPoints (Point pts[]/* formal parameter for unsized array called pts */) {
         for (int i = 0; i <= vertices; i++) {
-            memcpy(points[i], &pts[i%vertices], sizeof(Point));
+            memcpy(&points[i], &pts[i%vertices], sizeof(Point));
         }
     }
 
