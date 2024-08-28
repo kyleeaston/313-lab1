@@ -20,7 +20,7 @@ public:
 
     ~Shape () {
        	for(int i = 0; i <= vertices; i++) {
- 	    delete[] points[i];
+ 	    delete points[i];
 	}
 	delete[] points;
 	points = nullptr;
