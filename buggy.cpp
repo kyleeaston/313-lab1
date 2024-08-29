@@ -3,20 +3,22 @@
 struct Point {
     int x, y;
 
-    Point () : x(0), y(0) {}
+    Point () : x(), y() {}
     Point (int _x, int _y) : x(_x), y(_y) {}
 };
 
 class Shape {
 
-public:
     int vertices;
     Point** points;
-    double shapeArea;
-
+    
+public:
     Shape (int _vertices) {
         vertices = _vertices;
         points = new Point*[vertices+1];
+	for (int i = 0; i<= vertices; i++){
+		points[i] = new Point();
+	}	
     }
 
     ~Shape () {
@@ -24,17 +26,17 @@ public:
  	    delete points[i];
 	}
 	delete[] points;
-	points = nullptr;
+	//points = nullptr;
     }
 
-    void addPoints (Point** pts/* formal parameter for unsized array called pts */) {
+    void addPoints (Point* pts/* formal parameter for unsized array called pts */) {
         for (int i = 0; i <= vertices; i++) {
-	    points[i] = new Point(pts[i%vertices]->x, pts[i%vertices]->y);
-            //memcpy(&points[i], &pts[i%vertices], sizeof(Point));
+	    //points[i] = new Point(pts[i%vertices]->x, pts[i%vertices]->y);
+            memcpy(points[i], &pts[i%vertices], sizeof(Point));
         }
     }
 
-    double* area () {
+    double area () {
         int temp = 0;
         for (int i = 0; i < vertices; i++) {
             // FIXME: there are two methods to access members of pointers
@@ -43,8 +45,8 @@ public:
             int rhs = points[i+1]->x * points[i]->y;
             temp += (lhs - rhs);
         }
-        shapeArea = abs(temp)/2.0;
-        return &shapeArea;
+        double area = abs(temp)/2.0;
+        return area;
     }
 };
 
@@ -54,12 +56,13 @@ int main () {
     //          tri1 = (0, 0)
     //          tri2 = (1, 2)
     //          tri3 = (2, 0)
-    Point* tri1 = new Point();
-    Point* tri2 = new Point(1,2);
-    Point* tri3 = new Point();
-    tri3->x = 2;
+    Point tri1{0,0};
+    Point tri2 = Point(1,2);
+    Point tri3;
+    tri3.x = 2;
+    tri3.y = 0;
     // adding points to tri
-    Point* triPts[3] = {tri1, tri2, tri3};
+    Point triPts[3] = {tri1, tri2, tri3};
     Shape* tri = new Shape(3);
     tri->addPoints(triPts);
 
@@ -69,18 +72,18 @@ int main () {
     //          quad2 = (0, 2)
     //          quad3 = (2, 2)
     //          quad4 = (2, 0)
-    Point* quad1 = new Point(0,0);
-    Point* quad2 = new Point(0,2);
-    Point* quad3 = new Point(2,2);
-    Point* quad4 = new Point(2,0);
+    Point quad1 = Point(0,0);
+    Point quad2 = Point(0,2);
+    Point quad3 = Point(2,2);
+    Point quad4 = Point(2,0);
     // adding points to quad
-    Point* quadPts[4] = {quad1, quad2, quad3, quad4};
+    Point quadPts[4] = {quad1, quad2, quad3, quad4};
     Shape* quad = new Shape(4);
     quad->addPoints(quadPts);
 
     // FIXME: print out area of tri and area of quad
-    std::cout << *tri->area() << std::endl;
-    std::cout << *quad->area() << std::endl;
+    std::cout << tri->area() << std::endl;
+    std::cout << quad->area() << std::endl;
 
     // manage memory
     delete quad;
