@@ -12,6 +12,7 @@ class Shape {
 public:
     int vertices;
     Point** points;
+    double shapeArea;
 
     Shape (int _vertices) {
         vertices = _vertices;
@@ -23,7 +24,7 @@ public:
  	    delete points[i];
 	}
 	delete[] points;
-	//points = nullptr;
+	points = nullptr;
     }
 
     void addPoints (Point** pts/* formal parameter for unsized array called pts */) {
@@ -33,7 +34,7 @@ public:
         }
     }
 
-    double area () {
+    double* area () {
         int temp = 0;
         for (int i = 0; i < vertices; i++) {
             // FIXME: there are two methods to access members of pointers
@@ -42,8 +43,8 @@ public:
             int rhs = points[i+1]->x * points[i]->y;
             temp += (lhs - rhs);
         }
-        double area = abs(temp)/2.0;
-        return area;
+        shapeArea = abs(temp)/2.0;
+        return &shapeArea;
     }
 };
 
@@ -78,8 +79,10 @@ int main () {
     quad->addPoints(quadPts);
 
     // FIXME: print out area of tri and area of quad
-    std::cout << tri->area() << std::endl;
-    std::cout << quad->area() << std::endl;
+    std::cout << *tri->area() << std::endl;
+    std::cout << *quad->area() << std::endl;
+
+    // manage memory
     delete quad;
     delete tri;
 }
