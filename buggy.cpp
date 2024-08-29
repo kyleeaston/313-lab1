@@ -3,7 +3,7 @@
 struct Point {
     int x, y;
 
-    Point () : x(), y() {}
+    Point () : x(0), y(0) {}
     Point (int _x, int _y) : x(_x), y(_y) {}
 };
 
@@ -23,18 +23,19 @@ public:
  	    delete points[i];
 	}
 	delete[] points;
-	points = nullptr;
+	//points = nullptr;
     }
 
     void addPoints (Point** pts/* formal parameter for unsized array called pts */) {
         for (int i = 0; i <= vertices; i++) {
-            memcpy(&points[i], &pts[i%vertices], sizeof(Point));
+	    points[i] = new Point(pts[i%vertices]->x, pts[i%vertices]->y);
+            //memcpy(&points[i], &pts[i%vertices], sizeof(Point));
         }
     }
 
     double area () {
         int temp = 0;
-        for (int i = 0; i <= vertices; i++) {
+        for (int i = 0; i < vertices; i++) {
             // FIXME: there are two methods to access members of pointers
             //        use one to fix lhs and the other to fix rhs
             int lhs = (*points[i]).x * (*points[i+1]).y;
@@ -52,9 +53,10 @@ int main () {
     //          tri1 = (0, 0)
     //          tri2 = (1, 2)
     //          tri3 = (2, 0)
-    Point* tri1 = new Point(0,0);
+    Point* tri1 = new Point();
     Point* tri2 = new Point(1,2);
-    Point* tri3 = new Point(2,0);
+    Point* tri3 = new Point();
+    tri3->x = 2;
     // adding points to tri
     Point* triPts[3] = {tri1, tri2, tri3};
     Shape* tri = new Shape(3);
@@ -76,6 +78,8 @@ int main () {
     quad->addPoints(quadPts);
 
     // FIXME: print out area of tri and area of quad
-    std::cout << "hello";
-
+    std::cout << tri->area() << std::endl;
+    std::cout << quad->area() << std::endl;
+    delete quad;
+    delete tri;
 }
